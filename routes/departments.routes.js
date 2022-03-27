@@ -34,7 +34,7 @@ router.get("/departments/:id", async (req, res) => {
 
 router.post("/departments", async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name } = req.body;p
     const newDepartment = new Department({ name: name });
     await newDepartment.save();
     res.json({ message: "OK" });
