@@ -1,8 +1,6 @@
-// post.routes.js
-
 const express = require("express");
 const router = express.Router();
-const db = require("./../db");
+const ObjectId = require("mongodb").ObjectId;
 
 router.get("/products", (req, res) => {
   req.db
@@ -36,7 +34,6 @@ router.get("/products/:id", (req, res) => {
 
 router.post("/products", (req, res) => {
   const { name, client } = req.body;
-  db.products.push({ id: 3, name, client });
   req.db.collection("products").insertOne({ id: 3, name, client }, (err) => {
     if (err) res.status(500).json({ message: err });
     else res.json({ message: "OK" });
@@ -48,7 +45,7 @@ router.put("/products/:id", (req, res) => {
   req.db
     .collection("products")
     .updateOne(
-      { _id: ObjectId(req.params.id) },
+      { _id: new ObjectId(req.params.id) },
       { $set: { name, client } },
       (err) => {
         if (err) res.status(500).json({ message: err });
