@@ -1,8 +1,8 @@
-const Employe = require("../models/employee.model");
+const Employee = require("../models/employee.model");
 
 exports.getAll = async (req, res) => {
   try {
-    res.json(await Employe.find().populate("department"));
+    res.json(await Employee.find().populate("department"));
   } catch (err) {
     res.status(500).json({ message: err });
   }
@@ -10,9 +10,9 @@ exports.getAll = async (req, res) => {
 
 exports.getRandom = async (req, res) => {
   try {
-    const count = await Employe.countDocuments();
+    const count = await Employee.countDocuments();
     const rand = Math.floor(Math.random() * count);
-    const emp = await Employe.findOne().skip(rand).populate("department");
+    const emp = await Employee.findOne().skip(rand).populate("department");
     if (!emp) res.status(404).json({ message: err });
     else res.json(emp);
   } catch (err) {
@@ -22,7 +22,7 @@ exports.getRandom = async (req, res) => {
 
 exports.getByID = async (req, res) => {
   try {
-    const emp = await Employe.findById(req.params.id).populate("department");
+    const emp = await Employee.findById(req.params.id).populate("department");
     if (!emp) res.status(404).json({ message: "Not found" });
     else res.json(emp);
   } catch (err) {
@@ -30,22 +30,22 @@ exports.getByID = async (req, res) => {
   }
 };
 
-exports.AddEmploye = async (req, res) => {
+exports.AddEmployee = async (req, res) => {
   try {
     const { firstName, lastName, department } = req.body;
-    const newEmploye = new Employe({ firstName, lastName, department });
-    await newEmploye.save();
+    const newEmployee = new Employee({ firstName, lastName, department });
+    await newEmployee.save();
     res.json({ message: "OK" });
   } catch (err) {
     res.status(500).json({ message: err });
   }
 };
 
-exports.modifyEmployeByID = async (req, res) => {
+exports.modifyEmployeeByID = async (req, res) => {
   const { firstName, lastName, department } = req.body;
 
   try {
-    const emp = await Employe.findById(req.params.id).populate("department");
+    const emp = await Employee.findById(req.params.id).populate("department");
     if (emp) {
       emp.firstName = firstName;
       emp.lastName = lastName;
@@ -58,11 +58,11 @@ exports.modifyEmployeByID = async (req, res) => {
   }
 };
 
-exports.deleteEmploye = async (req, res) => {
+exports.deleteEmployee = async (req, res) => {
   try {
-    const emp = await Employe.findById(req.params.id).populate("department");
+    const emp = await Employee.findById(req.params.id).populate("department");
     if (emp) {
-      await Employe.deleteOne({ _id: req.params.id });
+      await Employee.deleteOne({ _id: req.params.id });
       res.json({ message: "OK" });
     } else res.status(404).json({ message: "Not found..." });
   } catch (err) {
